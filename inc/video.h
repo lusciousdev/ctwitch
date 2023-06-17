@@ -6,128 +6,136 @@
 
 #include "json.hpp"
 
+#include "apiobject.h"
 #include "enumerations.h"
 #include "pagination.h"
 
 using json = nlohmann::json;
 
-class MutedSegmentType
+namespace ctwitch
 {
-public:
-  MutedSegmentType() {};
+  class MutedSegmentType : ApiObject
+  {
+  public:
+    MutedSegmentType() {};
 
-  MutedSegmentType(json mutedSegmentJson);
+    MutedSegmentType(json mutedSegmentJson);
 
-  ~MutedSegmentType() {};
+    ~MutedSegmentType() {};
 
-  void SetDuration(int duration) { m_duration = duration; }
-  int GetDuration() { return m_duration; }
+    json ToJson();
 
-  void SetOffset(int offset) { m_offset = offset; }
-  int GetOffset() { return m_offset; }
+    void SetDuration(int duration) { m_duration = duration; }
+    int GetDuration() { return m_duration; }
 
-private:
-  int m_duration;
-  int m_offset;
-};
+    void SetOffset(int offset) { m_offset = offset; }
+    int GetOffset() { return m_offset; }
 
-class VideoDataType
-{
-public:
-  VideoDataType() {};
+  private:
+    int m_duration;
+    int m_offset;
+  };
 
-  VideoDataType(json videoDataJson);
+  class VideoDataType : ApiObject
+  {
+  public:
+    VideoDataType() {};
 
-  ~VideoDataType() {};
+    VideoDataType(json videoDataJson);
 
-  void SetId(std::string id) { m_id = id; }
-  const std::string& GetId() { return m_id; }
+    ~VideoDataType() {};
 
-  void SetStreamId(std::string streamId) { m_streamId = streamId; }
-  const std::string& GetStreamId() { return m_streamId; }
+    json ToJson();
 
-  void SetUserId(std::string userId) { m_userId = userId; }
-  const std::string& GetUserId() { return m_userId; }
+    void SetId(std::string id) { m_id = id; }
+    const std::string& GetId() { return m_id; }
 
-  void SetUserLogin(std::string userLogin) { m_userLogin = userLogin; }
-  const std::string& GetUserLogin() { return m_userLogin; }
+    void SetStreamId(std::string streamId) { m_streamId = streamId; }
+    const std::string& GetStreamId() { return m_streamId; }
 
-  void SetUserName(std::string userName) { m_userName = userName; }
-  const std::string& GetUserName() { return m_userName; }
+    void SetUserId(std::string userId) { m_userId = userId; }
+    const std::string& GetUserId() { return m_userId; }
 
-  void SetTitle(std::string title) { m_title = title; }
-  const std::string& GetTitle() { return m_title; }
+    void SetUserLogin(std::string userLogin) { m_userLogin = userLogin; }
+    const std::string& GetUserLogin() { return m_userLogin; }
 
-  void SetDescription(std::string description) { m_description = description; }
-  const std::string& GetDescription() { return m_description; }
+    void SetUserName(std::string userName) { m_userName = userName; }
+    const std::string& GetUserName() { return m_userName; }
 
-  void SetCreatedAt(std::string createdAt) { m_createdAt = createdAt; }
-  const std::string& GetCreatedAt() { return m_createdAt; }
+    void SetTitle(std::string title) { m_title = title; }
+    const std::string& GetTitle() { return m_title; }
 
-  void SetPublishedAt(std::string publishedAt) { m_publishedAt = publishedAt; }
-  const std::string& GetPublishedAt() { return m_publishedAt; }
+    void SetDescription(std::string description) { m_description = description; }
+    const std::string& GetDescription() { return m_description; }
 
-  void SetUrl(std::string url) { m_url = url; }
-  const std::string& GetUrl() { return m_url; }
+    void SetCreatedAt(std::string createdAt) { m_createdAt = createdAt; }
+    const std::string& GetCreatedAt() { return m_createdAt; }
 
-  void SetThumbnailUrl(std::string thumbnailUrl) { m_thumbnailUrl = thumbnailUrl; }
-  const std::string& GetThumbnailUrl() { return m_thumbnailUrl; }
+    void SetPublishedAt(std::string publishedAt) { m_publishedAt = publishedAt; }
+    const std::string& GetPublishedAt() { return m_publishedAt; }
 
-  void SetViewable(std::string viewable) { m_viewable = viewable; }
-  const std::string& GetViewable() { return m_viewable; }
+    void SetUrl(std::string url) { m_url = url; }
+    const std::string& GetUrl() { return m_url; }
 
-  void SetViewCount(int viewCount) { m_viewCount = viewCount; }
-  const int& GetViewCount() { return m_viewCount; }
+    void SetThumbnailUrl(std::string thumbnailUrl) { m_thumbnailUrl = thumbnailUrl; }
+    const std::string& GetThumbnailUrl() { return m_thumbnailUrl; }
 
-  void SetLanguage(std::string language) { m_language = language; }
-  const std::string& GetLanguage() { return m_language; }
+    void SetViewable(std::string viewable) { m_viewable = viewable; }
+    const std::string& GetViewable() { return m_viewable; }
 
-  void SetType(std::string typeString) { m_type = VideoTypeEnum(typeString); }
-  void SetType(VideoTypeEnum type) { m_type = type; }
-  const VideoTypeEnum& GetType() { return m_type; }
-  std::string GetTypeString() { return (std::string)m_type; }
+    void SetViewCount(int viewCount) { m_viewCount = viewCount; }
+    const int& GetViewCount() { return m_viewCount; }
 
-  void SetDuration(std::string duration) { m_duration = duration; }
-  const std::string& GetDuration() { return m_duration; }
+    void SetLanguage(std::string language) { m_language = language; }
+    const std::string& GetLanguage() { return m_language; }
 
-  std::vector<MutedSegmentType>& GetMutedSegments() { return m_mutedSegments; }
- 
-private:
-  std::string   m_id;
-  std::string   m_streamId;
-  std::string   m_userId;
-  std::string   m_userLogin;
-  std::string   m_userName;
-  std::string   m_title;
-  std::string   m_description;
-  std::string   m_createdAt;
-  std::string   m_publishedAt;
-  std::string   m_url;
-  std::string   m_thumbnailUrl;
-  std::string   m_viewable;
-  int           m_viewCount;
-  std::string   m_language;
-  VideoTypeEnum m_type;
-  std::string   m_duration;
+    void SetType(std::string typeString) { m_type = VideoTypeEnum(typeString); }
+    void SetType(VideoTypeEnum type) { m_type = type; }
+    const VideoTypeEnum& GetType() { return m_type; }
+    std::string GetTypeString() { return (std::string)m_type; }
 
-  std::vector<MutedSegmentType> m_mutedSegments;
-};
+    void SetDuration(std::string duration) { m_duration = duration; }
+    const std::string& GetDuration() { return m_duration; }
 
-class VideoResponseType
-{
-public:
-  VideoResponseType() {};
+    std::vector<MutedSegmentType>& GetMutedSegments() { return m_mutedSegments; }
+  
+  private:
+    std::string   m_id;
+    std::string   m_streamId;
+    std::string   m_userId;
+    std::string   m_userLogin;
+    std::string   m_userName;
+    std::string   m_title;
+    std::string   m_description;
+    std::string   m_createdAt;
+    std::string   m_publishedAt;
+    std::string   m_url;
+    std::string   m_thumbnailUrl;
+    std::string   m_viewable;
+    int           m_viewCount;
+    std::string   m_language;
+    VideoTypeEnum m_type;
+    std::string   m_duration;
 
-  VideoResponseType(json videoResponseJson);
+    std::vector<MutedSegmentType> m_mutedSegments;
+  };
 
-  ~VideoResponseType() {};
+  class VideoResponseType : ApiObject
+  {
+  public:
+    VideoResponseType() {};
+    VideoResponseType(json videoResponseJson);
+    ~VideoResponseType() {};
 
-  std::vector<VideoDataType>& GetData() { return m_data; }
-  PaginationType& GetPagination() { return m_pagination; }
+    json ToJson();
 
-private:
-  std::vector<VideoDataType> m_data;
-  PaginationType m_pagination;
-};
+    std::vector<VideoDataType>& GetData() { return m_data; }
+    PaginationType& GetPagination() { return m_pagination; }
+
+  private:
+    std::vector<VideoDataType> m_data;
+    PaginationType m_pagination;
+  };
+}
 
 #endif
