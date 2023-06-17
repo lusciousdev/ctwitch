@@ -49,7 +49,7 @@ json VideoDataType::ToJson()
 {
   json j = {
     { "id", m_id },
-    { "stream_id", (m_streamId == "") ? "null" : m_streamId },
+    { "stream_id", (m_streamId == "") ? (json)nullptr : (json)m_streamId },
     { "user_id", m_userId },
     { "user_login", m_userLogin },
     { "user_name", m_userName },
@@ -64,7 +64,7 @@ json VideoDataType::ToJson()
     { "language", m_language },
     { "type", (std::string)m_type },
     { "duration", m_duration },
-    { "muted_segments", (m_mutedSegments.size() > 0) ? json::array() : "null"_json }
+    { "muted_segments", (m_mutedSegments.size() > 0) ? json::array() : (json)nullptr }
   };
 
   if (m_mutedSegments.size() > 0)

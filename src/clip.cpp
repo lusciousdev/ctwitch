@@ -20,7 +20,10 @@ ClipDataType::ClipDataType(json dataJson)
   m_createdAt = dataJson["created_at"];
   m_thumbnailUrl = dataJson["thumbnail_url"];
   m_duration = dataJson["duration"];
-  m_vodOffset = dataJson["vod_offset"];
+  if (!dataJson["vod_offset"].is_null())
+    m_vodOffset = dataJson["vod_offset"];
+  else
+    m_vodOffset = -1;
 }
 
 json ClipDataType::ToJson()
@@ -41,7 +44,7 @@ json ClipDataType::ToJson()
     {"created_at", m_createdAt},
     {"thumbnail_url", m_thumbnailUrl},
     {"duration", m_duration},
-    {"vod_offset", m_vodOffset}
+    {"vod_offset", (m_vodOffset == -1) ? (json)nullptr : (json)m_vodOffset}
   };
 }
 

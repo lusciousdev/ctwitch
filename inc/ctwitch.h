@@ -33,6 +33,15 @@ namespace ctwitch
     ~api();
 
     ClipResponseType GetClip(std::string clipId);
+    VideoResponseType GetVideo(std::string videoId);
+
+    ClipResponseType GetClips(std::vector<std::string> ids);
+    ClipResponseType GetBroadcasterClips(std::string userId, std::string startedAt, std::string endedAt, int first = 20);
+    ClipResponseType GetGameClips(std::string gameId, std::string startedAt, std::string endedAt, int first = 20);
+
+    VideoResponseType GetVideos(std::vector<std::string> ids);
+    VideoResponseType GetUserVideos(std::string userId, PeriodEnum period = PeriodEnum::ALL, SortEnum sort = SortEnum::TIME, VideoTypeEnum type = VideoTypeEnum::ALL, int first = 20);
+    VideoResponseType GetGameVideos(std::string gameId, PeriodEnum period = PeriodEnum::ALL, SortEnum sort = SortEnum::TIME, VideoTypeEnum type = VideoTypeEnum::ALL, int first = 20);
     
   private:
     std::string m_clientId;
@@ -42,6 +51,9 @@ namespace ctwitch
     std::vector<std::string> m_defaultHeaders;
 
     CURL* m_handle;
+
+    ClipResponseType GetClips(json parameters);
+    VideoResponseType GetVideos(json parameters);
 
     std::string Get(std::string url, std::string endpoint, std::vector<std::array<std::string, 2>> parameters, std::vector<std::string> headers);
     std::string Post(std::string url, std::string endpoint, std::vector<std::array<std::string, 2>> parameters, std::vector<std::string> headers);

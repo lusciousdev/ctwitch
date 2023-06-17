@@ -24,9 +24,15 @@ int main(int argc, char** argv)
 
     ctwitch::api twitchApi = ctwitch::api(clientId, clientSecret);
 
-    ctwitch::ClipResponseType clip = twitchApi.GetClip("DepressedFunnyEagleLeeroyJenkins-Kv_NpqUNkpqTpGgO");
+    ctwitch::ClipResponseType clip = twitchApi.GetBroadcasterClips("43246220", "2020-01-01T00:00:01Z", "2023-12-31T23:59:59Z", 5);
 
+    std::cout << "Clip count: " << clip.GetData().size() << std::endl;
     std::cout << std::setw(2) << clip.ToJson() << std::endl;
+
+    ctwitch::VideoResponseType video = twitchApi.GetUserVideos("43246220");
+
+    std::cout << "Video count: " << video.GetData().size() << std::endl;
+    std::cout << std::setw(2) << video.ToJson() << std::endl;
   }
   else
   {

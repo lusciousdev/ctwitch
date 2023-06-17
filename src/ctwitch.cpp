@@ -71,13 +71,113 @@ api::~api()
 
 ClipResponseType api::GetClip(std::string clipId)
 {
-  std::vector<std::array<std::string, 2>> params = { { "id", clipId } };
+  return GetClips(json({ { "id", clipId } }));
+}
+
+ClipResponseType api::GetClips(std::vector<std::string> ids)
+{
+  return ClipResponseType();
+}
+
+ClipResponseType api::GetBroadcasterClips(std::string userId, std::string startAt, std::string endAt, int first)
+{
+  json clipParams = {
+    { "broadcaster_id", userId },
+    { "started_at", startAt },
+    { "ended_at", endAt },
+    { "first", first }
+  };
+
+  return GetClips(clipParams);
+}
+
+ClipResponseType api::GetGameClips(std::string gameId, std::string startAt, std::string endAt, int first)
+{
+  json clipParams = {
+    { "game_id", gameId },
+    { "started_at", startAt },
+    { "ended_at", endAt },
+    { "first", first }
+  };
+
+  return GetClips(clipParams);
+}
+
+VideoResponseType api::GetVideo(std::string videoId)
+{
+  return GetVideos(json({ { "id", videoId }}));
+}
+
+VideoResponseType api::GetUserVideos(std::string userId, PeriodEnum period, SortEnum sort, VideoTypeEnum type, int first)
+{
+  json videoParams = {
+    { "user_id", userId },
+    { "period", (std::string)period },
+    { "sort", (std::string)sort },
+    { "type", (std::string)type },
+    { "first", std::to_string(first) }
+  };
+
+  return GetVideos(videoParams);
+}
+
+VideoResponseType api::GetGameVideos(std::string gameId, PeriodEnum period, SortEnum sort, VideoTypeEnum type, int first)
+{
+  json videoParams = {
+    { "game_id", gameId },
+    { "period", (std::string)period },
+    { "sort", (std::string)sort },
+    { "type", (std::string)type },
+    { "first", std::to_string(first) }
+  };
+
+  return GetVideos(videoParams);
+}
+
+ClipResponseType api::GetClips(json paramJson)
+{
+  std::vector<std::array<std::string, 2>> params;
+
+  for (auto& [key, val] : paramJson.items())
+  {
+    std::string valStr;
+    if (val.is_number_integer())
+    {
+      valStr = std::to_string(static_cast<int>(val));
+    }
+    else if (val.is_number_float())
+    {
+      valStr = std::to_string(static_cast<float>(val));
+    }
+    else
+    {
+      valStr = val;
+    }
+
+    params.push_back({ key, valStr });
+  }
 
   std::string apiResp = Get(API_URL, "/clips", params, m_defaultHeaders);
 
   json apiJson = json::parse(apiResp);
 
   return ClipResponseType(apiJson);
+}
+
+VideoResponseType api::GetVideos(json paramJson)
+{
+  std::vector<std::array<std::string, 2>> params;
+
+  for (auto& obj : paramJson.items())
+  {
+    params.push_back({ obj.key(), std::string(obj.value()) });
+  }
+
+  std::string apiResp = Get(API_URL, "/videos", params, m_defaultHeaders);
+
+  json apiJson = json::parse(apiResp);
+
+  return VideoResponseType(apiJson);
 }
 
 std::string api::Get(std::string baseUrl, std::string endpoint, std::vector<std::array<std::string, 2>> parameters, std::vector<std::string> headers)
@@ -113,6 +213,10 @@ std::string api::Get(std::string baseUrl, std::string endpoint, std::vector<std:
       return std::string("{}");
     }
   }
+
+  char* urlStr;
+  curl_url_get(url, CURLUPART_URL, &urlStr, 0);
+  std::cout << urlStr << std::endl;
 
   struct MemoryStruct chunk;
   chunk.memory = (char*)malloc(1);
