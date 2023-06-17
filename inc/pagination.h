@@ -4,25 +4,31 @@
 #include <string>
 #include "json.hpp"
 #include "stringutil.h"
+#include "apiobject.h"
 
 using json = nlohmann::json;
 
-class PaginationType
+namespace ctwitch
 {
-public:
-  PaginationType() { m_cursor = ""; };
+  class PaginationType : ApiObject
+  {
+  public:
+    PaginationType() { m_cursor = ""; };
 
-  PaginationType(json paginationJson);
+    PaginationType(json paginationJson);
 
-  ~PaginationType() {};
+    ~PaginationType() {};
 
-  void SetCursor(std::string cursor) { m_cursor = cursor; }
-  std::string GetCursor() { return m_cursor; }
+    json ToJson();
 
-  bool ContinuePaging() { return !stringutil::iequals(m_cursor, ""); }
+    void SetCursor(std::string cursor) { m_cursor = cursor; }
+    std::string GetCursor() { return m_cursor; }
 
-private:
-  std::string m_cursor;
-};
+    bool ContinuePaging() { return !stringutil::iequals(m_cursor, ""); }
+
+  private:
+    std::string m_cursor;
+  };
+}
 
 #endif
